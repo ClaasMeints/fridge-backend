@@ -1,4 +1,13 @@
-import { Get, Post, Body, Put, Delete, Param, Controller, UsePipes } from '@nestjs/common';
+import {
+  Get,
+  Post,
+  Body,
+  Put,
+  Delete,
+  Param,
+  Controller,
+  UsePipes,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { fridge_user_service } from './fridge_user.service';
 import { fridge_user_interface } from './fridge_user.interface';
@@ -12,5 +21,5 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 @ApiBearerAuth()
 @Controller('fridge_user')
 export class fridge_user_controller {
-    constructor(private readonly _fridge_user_service: fridge_user_service) {}
+  constructor(private readonly _fridge_user_service: fridge_user_service) {}
 }

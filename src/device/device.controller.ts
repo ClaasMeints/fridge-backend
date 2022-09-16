@@ -1,10 +1,6 @@
-import { Get, Post, Body, Put, Delete, Param, Controller, UsePipes } from '@nestjs/common';
-import { Request } from 'express';
+import { Get, Controller } from '@nestjs/common';
 import { device_service } from './device.service';
 import { device_interface } from './device.interface';
-import { device_dto } from './device.dto';
-import { HttpException } from '@nestjs/common/exceptions/http.exception';
-import { fridge_user_decorator } from '../fridge_user/fridge_user.decorator';
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
@@ -12,5 +8,14 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 @ApiBearerAuth()
 @Controller('device')
 export class device_controller {
-    constructor(private readonly _device_service: device_service) {}
+  constructor(private readonly _device_service: device_service) {}
+
+  @Get('devices')
+  async get_all_devices(): Promise<device_interface[]> {
+    return (await this._device_service.findAll()).map((device) => {
+      return {
+        device,
+      };
+    });
+  }
 }

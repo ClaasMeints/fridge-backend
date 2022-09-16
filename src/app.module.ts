@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { device_module } from '../src/device/device.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { fridge_user_module } from './fridge_user/fridge_user.module';
@@ -16,6 +17,7 @@ import { fridge_user_module } from './fridge_user/fridge_user.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+    device_module,
     fridge_user_module,
   ],
   controllers: [AppController],
