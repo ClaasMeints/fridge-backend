@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository } from 'sequelize-typescript';
 import { device_service } from '../device/device.service';
 import { fridge_user_device_relation_service } from '../fridge_user_device_relation/fridge_user_device_relation.service';
 import { product_dto } from '../product/product.dto';
@@ -15,7 +14,6 @@ export class device_content_service {
     private device_service: device_service,
     private product_service: product_service,
     private fridge_user_device_relation_service: fridge_user_device_relation_service,
-    @InjectRepository(device_content)
     private device_content_repository: Repository<device_content>,
   ) {}
 
@@ -27,13 +25,11 @@ export class device_content_service {
     device_id: number,
     device_content_dto: product_dto,
   ): Promise<device_content> {
-    const device_content_entity = this.device_content_repository.create({
+    return this.device_content_repository.create({
       device_id: device_id,
       product_id: (await this.product_service.create(device_content_dto))
         .product.product_id,
     });
-    await this.device_content_repository.save(device_content_entity);
-    return device_content_entity;
   }
 
   async take_product_out_of_device(

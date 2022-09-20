@@ -1,22 +1,34 @@
 import { IsDecimal } from 'class-validator';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  Default,
+  ForeignKey,
+  Model,
+  PrimaryKey,
+  Table,
+} from 'sequelize-typescript';
 import { unit } from '../unit/unit.entity';
 
-@Entity('unit_conversion')
-export class unit_conversion {
-  @PrimaryColumn()
+@Table({ tableName: 'unit_conversion' })
+export class unit_conversion extends Model<unit_conversion> {
+  @PrimaryKey
+  @Column
+  @ForeignKey(() => unit)
   unit_factor_id: number;
-  @ManyToOne(() => unit, (unit) => unit.unit_conversion)
-  @JoinColumn({ name: 'unit_factor_id' })
+  @BelongsTo(() => unit)
   unit_factor: unit;
 
-  @PrimaryColumn()
+  @PrimaryKey
+  @Column
+  @ForeignKey(() => unit)
   unit_result_id: number;
-  @ManyToOne(() => unit, (unit) => unit.unit_conversion)
-  @JoinColumn({ name: 'unit_result_id' })
+  @BelongsTo(() => unit)
   unit_result: unit;
 
-  @Column({ default: 1, type: 'decimal' })
+  @Default(1)
+  @Column({ type: DataType.DECIMAL(10, 2) })
   @IsDecimal()
   factor: number;
 }

@@ -1,28 +1,32 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  AllowNull,
+  AutoIncrement,
+  Column,
+  HasMany,
+  Model,
+  PrimaryKey,
+  Table,
+} from 'sequelize-typescript';
 import { product_class } from '../product_class/product_class.entity';
 import { unit_conversion } from '../unit_conversion/unit_conversion.entity';
 
-@Entity('unit')
-export class unit {
-  @PrimaryGeneratedColumn()
+@Table({ tableName: 'unit' })
+export class unit extends Model<unit> {
+  @PrimaryKey
+  @AutoIncrement
+  @Column
   unit_id: number;
 
-  @Column({ nullable: true })
+  @AllowNull
+  @Column
   unit_name: string;
 
-  @Column()
+  @Column
   unit_symbol: string;
 
-  @OneToMany(() => product_class, (product_class) => product_class.unit_id)
+  @HasMany(() => product_class)
   product_class: product_class[];
 
-  @OneToMany(
-    () => unit_conversion,
-    (unit_conversion) => unit_conversion.unit_factor_id,
-  )
-  @OneToMany(
-    () => unit_conversion,
-    (unit_conversion) => unit_conversion.unit_result_id,
-  )
+  @HasMany(() => unit_conversion)
   unit_conversion: unit_conversion[];
 }

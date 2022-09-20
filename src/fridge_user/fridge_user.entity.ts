@@ -1,35 +1,34 @@
-import {
-  BeforeInsert,
-  BeforeUpdate,
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryColumn,
-} from 'typeorm';
 import { hash } from 'bcrypt';
 import { fridge_user_device_relation } from '../fridge_user_device_relation/fridge_user_device_relation.entity';
 import { shopping_list } from '../shopping_list/shopping_list.entity';
+import {
+  BeforeCreate,
+  BeforeUpdate,
+  Column,
+  HasMany,
+  Model,
+  PrimaryKey,
+  Table,
+} from 'sequelize-typescript';
 
-@Entity('fridge_user')
-export class fridge_user {
-  @PrimaryColumn()
+@Table({ tableName: 'fridge_user' })
+export class fridge_user extends Model<fridge_user> {
+  @PrimaryKey
+  @Column
   login: string;
 
-  @Column()
+  @Column
   password: string;
 
-  @BeforeInsert()
-  @BeforeUpdate()
-  async hashPassword() {
-    this.password = await hash(this.password, 10);
+  @BeforeCreate
+  @BeforeUpdate
+  static async hashPassword(user: fridge_user) {
+    user.password = await hash(user.password, 10);
   }
 
-  @OneToMany(
-    () => fridge_user_device_relation,
-    (fridge_user_device_relation) => fridge_user_device_relation.login,
-  )
+  @HasMany(() => fridge_user_device_relation)
   fridge_user_device_relation: fridge_user_device_relation[];
 
-  @OneToMany(() => shopping_list, (shopping_list) => shopping_list.login)
+  @HasMany(() => shopping_list)
   shopping_list: shopping_list[];
 }

@@ -1,29 +1,34 @@
 import { IsEAN } from 'class-validator';
 import {
+  AllowNull,
+  AutoIncrement,
+  BelongsTo,
   Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+  HasMany,
+  Model,
+  PrimaryKey,
+  Table,
+} from 'sequelize-typescript';
+import { device_content } from '../device_content/device_content.entity';
 import { product_class } from '../product_class/product_class.entity';
 
-@Entity('product')
-export class product {
-  @PrimaryGeneratedColumn()
+@Table({ tableName: 'product' })
+export class product extends Model<product> {
+  @PrimaryKey
+  @AutoIncrement
+  @Column
   product_id: number;
 
-  @Column({ nullable: true })
+  @AllowNull
+  @Column
   @IsEAN()
   ean: string;
 
-  @Column()
+  @Column
   class_id: number;
-  @ManyToOne(() => product_class, (product_class) => product_class.product)
-  @JoinColumn({ name: 'class_id' })
+  @BelongsTo(() => product_class)
   class: product_class;
 
-  @OneToMany(() => product, (product) => product.product_id)
+  @HasMany(() => device_content)
   device_content: product[];
 }

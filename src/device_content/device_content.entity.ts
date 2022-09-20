@@ -1,34 +1,49 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { IsDate } from 'class-validator';
 import { device } from '../device/device.entity';
 import { product } from '../product/product.entity';
+import {
+  AllowNull,
+  BelongsTo,
+  Column,
+  Default,
+  ForeignKey,
+  Model,
+  PrimaryKey,
+  Table,
+} from 'sequelize-typescript';
 
-@Entity('device_content')
-export class device_content {
-  @PrimaryColumn()
+@Table({ tableName: 'device_content' })
+export class device_content extends Model<device_content> {
+  @PrimaryKey
+  @Column
+  @ForeignKey(() => device)
   device_id: number;
-  @ManyToOne(() => device, (device_id) => device_id.device_content)
-  @JoinColumn({ name: 'device_id' })
+  @BelongsTo(() => device)
   device: device;
 
-  @PrimaryColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @PrimaryKey
+  @Default('CURRENT_TIMESTAMP')
+  @Column
   @IsDate()
   filled_in: Date;
 
-  @Column()
+  @Column
+  @ForeignKey(() => product)
   product_id: number;
-  @ManyToOne(() => product, (product) => product.device_content)
-  @JoinColumn({ name: 'product_id' })
+  @BelongsTo(() => product)
   product: product;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @AllowNull
+  @Column
   @IsDate()
   opened: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @AllowNull
+  @Column
   @IsDate()
   dropped_out: Date;
 
-  @Column({ default: 100 })
+  @Default(100)
+  @Column
   percentage_left: number;
 }

@@ -10,7 +10,6 @@ import { device_module } from '../device/device.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([fridge_user_device_relation]),
-    device_module,
     product_module,
     fridge_user_module,
   ],

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository } from 'sequelize-typescript';
 import { product_class_service } from '../product_class/product_class.service';
 import { product_dto, product_ean_dto } from './product.dto';
 import { product } from './product.entity';
@@ -10,7 +9,6 @@ import { product_interface } from './product.interface';
 export class product_service {
   constructor(
     private product_class_service: product_class_service,
-    @InjectRepository(product)
     private product_repository: Repository<product>,
   ) {}
 
@@ -23,10 +21,8 @@ export class product_service {
   }
 
   async create(product: product_dto): Promise<product_interface> {
-    const product_entity = this.product_repository.create(product);
-    await this.product_repository.save(product_entity);
     return {
-      product: product_entity,
+      product: await this.product_repository.create(product),
     };
   }
 }

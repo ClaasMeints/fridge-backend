@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository } from 'sequelize-typescript';
 import { fridge_user_device_relation_service } from '../fridge_user_device_relation/fridge_user_device_relation.service';
 import { create_device_dto, update_device_dto } from './device.dto';
 import { device } from './device.entity';
@@ -9,18 +8,15 @@ import { device } from './device.entity';
 export class device_service {
   constructor(
     private fridge_user_device_relation_service: fridge_user_device_relation_service,
-    @InjectRepository(device)
     private device_repository: Repository<device>,
   ) {}
 
   async findOneByDeviceId(device_id: number): Promise<device> {
-    return this.device_repository.findOne({ where: { device_id: device_id } });
+    return this.device_repository.findByPk(device_id);
   }
 
   async create(login: string, device: create_device_dto): Promise<device> {
-    const device_entity = await this.device_repository.save(
-      this.device_repository.create(device),
-    );
+    const device_entity = await this.device_repository.create(device);
     this.fridge_user_device_relation_service.create(
       login,
       device_entity.device_id,
@@ -29,7 +25,7 @@ export class device_service {
   }
 
   async findAll(): Promise<device[]> {
-    return this.device_repository.find();
+    return this.device_repository.findAll();
   }
 
   async findOne(id: number): Promise<device> {
@@ -37,7 +33,7 @@ export class device_service {
   }
 
   async update(id: number, device: update_device_dto): Promise<device> {
-    await this.device_repository.update({ device_id: id }, device);
+    await this.device_repository.update(device, { where: { device_id: id } });
     return this.device_repository.findOne({ where: { device_id: id } });
   }
 

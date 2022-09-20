@@ -12,5 +12,6 @@ import { fridge_user_device_relation_module } from '../fridge_user_device_relati
   ],
   controllers: [device_controller],
   providers: [device_service],
+  exports: [device_service],
 })
 export class device_module {}

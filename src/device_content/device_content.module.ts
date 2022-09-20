@@ -16,5 +16,6 @@ import { device_module } from '../device/device.module';
   ],
   controllers: [device_content_controller],
   providers: [device_content_service],
+  exports: [device_content_service],
 })
 export class device_content_module {}
