@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { where } from 'sequelize';
-import { Repository } from 'sequelize-typescript';
+import { Inject, Injectable } from '@nestjs/common';
+import { Repository, Sequelize } from 'sequelize-typescript';
 import {
   create_fridge_user_dto,
   update_fridge_user_dto,
@@ -9,7 +8,16 @@ import { fridge_user } from './fridge_user.entity';
 
 @Injectable()
 export class fridge_user_service {
-  constructor(private fridge_user_repository: Repository<fridge_user>) {}
+  constructor(
+    @Inject('SEQUELIZE')
+    private sequelize: Sequelize,
+    @Inject('FRIDGE_USER_REPOSITORY')
+    private fridge_user_repository: typeof fridge_user,
+  ) {
+    this.fridge_user_repository = sequelize.getRepository(
+      fridge_user,
+    ) as typeof fridge_user;
+  }
 
   async findeOne(login: string): Promise<fridge_user> {
     return await this.fridge_user_repository.findOne({

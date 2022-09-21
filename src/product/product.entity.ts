@@ -4,6 +4,7 @@ import {
   AutoIncrement,
   BelongsTo,
   Column,
+  ForeignKey,
   HasMany,
   Model,
   PrimaryKey,
@@ -24,6 +25,7 @@ export class product extends Model<product> {
   @IsEAN()
   ean: string;
 
+  @ForeignKey(() => product_class)
   @Column
   class_id: number;
   @BelongsTo(() => product_class)

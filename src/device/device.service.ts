@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { Repository } from 'sequelize-typescript';
+import { Inject, Injectable } from '@nestjs/common';
+import { Repository, Sequelize } from 'sequelize-typescript';
 import { fridge_user_device_relation_service } from '../fridge_user_device_relation/fridge_user_device_relation.service';
 import { create_device_dto, update_device_dto } from './device.dto';
 import { device } from './device.entity';
@@ -7,9 +7,14 @@ import { device } from './device.entity';
 @Injectable()
 export class device_service {
   constructor(
+    @Inject('SEQUELIZE')
+    private sequelize: Sequelize,
+    @Inject('DEVICE_REPOSITORY')
+    private device_repository: typeof device,
     private fridge_user_device_relation_service: fridge_user_device_relation_service,
-    private device_repository: Repository<device>,
-  ) {}
+  ) {
+    this.device_repository = sequelize.getRepository(device);
+  }
 
   async findOneByDeviceId(device_id: number): Promise<device> {
     return this.device_repository.findByPk(device_id);

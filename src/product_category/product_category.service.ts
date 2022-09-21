@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'sequelize-typescript';
 import { product_category_dto } from './product_category.dto';
 import { product_category } from './product_category.entity';
@@ -7,9 +7,15 @@ import { HttpService } from '@nestjs/axios';
 @Injectable()
 export class product_category_service {
   constructor(
-    private readonly httpService: HttpService,
-    private product_category_repository: Repository<product_category>,
-  ) {}
+    @Inject('SEQUELIZE')
+    private sequelize: any,
+    private httpService: HttpService,
+    @Inject('PRODUCT_CATEGORY_REPOSITORY')
+    private product_category_repository: typeof product_category,
+  ) {
+    this.product_category_repository =
+      sequelize.getRepository(product_category);
+  }
 
   async findAll(): Promise<product_category[]> {
     return await this.product_category_repository.findAll();

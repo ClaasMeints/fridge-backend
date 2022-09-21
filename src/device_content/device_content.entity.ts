@@ -5,6 +5,7 @@ import {
   AllowNull,
   BelongsTo,
   Column,
+  CreatedAt,
   Default,
   ForeignKey,
   Model,
@@ -22,7 +23,7 @@ export class device_content extends Model<device_content> {
   device: device;
 
   @PrimaryKey
-  @Default('CURRENT_TIMESTAMP')
+  @CreatedAt
   @Column
   @IsDate()
   filled_in: Date;

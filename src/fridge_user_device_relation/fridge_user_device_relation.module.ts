@@ -1,20 +1,19 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { fridge_user_device_relation_controller } from './fridge_user_device_relation.controller';
 import { fridge_user_device_relation_service } from './fridge_user_device_relation.service';
-import { fridge_user_device_relation } from './fridge_user_device_relation.entity';
 import { product_module } from '../product/product.module';
 import { fridge_user_module } from '../fridge_user/fridge_user.module';
-import { device_module } from '../device/device.module';
+import { fridge_user_device_relation_providers } from './fridge_user_device_relation.providers';
+import { databaseProviders } from '../database/database.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([fridge_user_device_relation]),
-    product_module,
-    fridge_user_module,
-  ],
+  imports: [product_module, fridge_user_module],
   controllers: [fridge_user_device_relation_controller],
-  providers: [fridge_user_device_relation_service],
+  providers: [
+    fridge_user_device_relation_service,
+    ...fridge_user_device_relation_providers,
+    ...databaseProviders,
+  ],
   exports: [fridge_user_device_relation_service],
 })
 export class fridge_user_device_relation_module {}

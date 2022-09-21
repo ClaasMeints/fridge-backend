@@ -1,13 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { Repository } from 'sequelize-typescript';
+import { Inject, Injectable } from '@nestjs/common';
+import { Repository, Sequelize } from 'sequelize-typescript';
 import { unit_conversion_dto } from './unit_conversion.dto';
 import { unit_conversion } from './unit_conversion.entity';
 
 @Injectable()
 export class unit_conversion_service {
   constructor(
-    private unit_conversion_repository: Repository<unit_conversion>,
-  ) {}
+    @Inject('SEQUELIZE')
+    private sequelize: Sequelize,
+    @Inject('UNIT_CONVERSION_REPOSITORY')
+    private unit_conversion_repository: typeof unit_conversion,
+  ) {
+    this.unit_conversion_repository = sequelize.getRepository(unit_conversion);
+  }
 
   async findAll(): Promise<unit_conversion[]> {
     return await this.unit_conversion_repository.findAll();

@@ -1,6 +1,7 @@
 import { IsBase64, IsInt, IsPositive } from 'class-validator';
 import {
   AllowNull,
+  AutoIncrement,
   BelongsTo,
   Column,
   Default,
@@ -19,9 +20,11 @@ import { unit } from '../unit/unit.entity';
 @Table({ tableName: 'product_class' })
 export class product_class extends Model<product_class> {
   @PrimaryKey
+  @AutoIncrement
   @Column
   class_id: number;
 
+  @ForeignKey(() => product_category)
   @Column
   category_id: number;
   @BelongsTo(() => product_category)

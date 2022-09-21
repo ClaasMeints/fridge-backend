@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'sequelize-typescript';
 import { product_category_service } from '../product_category/product_category.service';
 import { unit_service } from '../unit/unit.service';
@@ -8,10 +8,15 @@ import { product_class } from './product_class.entity';
 @Injectable()
 export class product_class_service {
   constructor(
-    private unit_service: unit_service,
+    @Inject('SEQUELIZE')
+    private sequelize: any,
     private product_category_service: product_category_service,
-    private product_class_repository: Repository<product_class>,
-  ) {}
+    private unit_service: unit_service,
+    @Inject('PRODUCT_CLASS_REPOSITORY')
+    private product_class_repository: typeof product_class,
+  ) {
+    this.product_class_repository = sequelize.getRepository(product_class);
+  }
 
   async findAll(): Promise<product_class[]> {
     return this.product_class_repository.findAll();

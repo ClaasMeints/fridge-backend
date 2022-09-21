@@ -10,7 +10,7 @@ import {
 } from 'sequelize-typescript';
 import { product_class } from '../product_class/product_class.entity';
 
-@Table({ tableName: 'product' })
+@Table({ tableName: 'product_category' })
 export class product_category extends Model<product_category> {
   @PrimaryKey
   @AutoIncrement

@@ -1,11 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { Repository } from 'sequelize-typescript';
+import { Inject, Injectable } from '@nestjs/common';
+import { Sequelize } from 'sequelize-typescript';
 import { unit_dto } from './unit.dto';
 import { unit } from './unit.entity';
 
 @Injectable()
 export class unit_service {
-  constructor(private unit_repository: Repository<unit>) {}
+  constructor(
+    @Inject('SEQUELIZE')
+    private sequelize: Sequelize,
+    @Inject('UNIT_REPOSITORY')
+    private unit_repository: typeof unit,
+  ) {
+    this.unit_repository = sequelize.getRepository(unit);
+  }
 
   async findAll(): Promise<unit[]> {
     return await this.unit_repository.findAll();
