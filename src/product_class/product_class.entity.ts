@@ -34,7 +34,7 @@ export class product_class extends Model<product_class> {
   @ForeignKey(() => unit)
   unit_id: number;
   @BelongsTo(() => unit)
-  unit_: unit;
+  unit: unit;
 
   @Column
   class_name: string;

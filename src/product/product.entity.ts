@@ -29,7 +29,7 @@ export class product extends Model<product> {
   @Column
   class_id: number;
   @BelongsTo(() => product_class)
-  class: product_class;
+  product_class: product_class;
 
   @HasMany(() => device_content)
   device_content: product[];
