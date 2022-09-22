@@ -18,11 +18,7 @@ export class product_service {
   }
 
   async get_product_data(ean: string): Promise<product_ean_dto> {
-    return {
-      name: 'Test',
-      image: 'Test',
-      quantity: 1,
-    }; // OPTIONAL: implement
+    return { name: null, image: null, quantity: null }; // OPTIONAL: implement
   }
 
   async create(product: product_dto): Promise<product_interface> {

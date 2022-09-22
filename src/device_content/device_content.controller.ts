@@ -29,7 +29,9 @@ export class device_content_controller {
   async get_all_device_contents(
     @Param() login_dto: { login: string },
   ): Promise<device_content_dto[]> {
-    return (await this._device_content_service.findAll(login_dto.login)) || [];
+    const result = await this._device_content_service.findAll(login_dto.login);
+    console.log('result', result);
+    return result || [];
   }
 
   // OPTIONAL: add an api to fetch all contents of a specific category
