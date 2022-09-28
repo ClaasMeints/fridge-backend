@@ -34,6 +34,22 @@ export class device_content_controller {
     return result || [];
   }
 
+  @ApiOperation({
+    summary: 'Get all device contents from all devices of a specific user',
+  })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @Get(':device_id')
+  async get_device_contents(
+    @Param() device_id_dto: { device_id: number },
+  ): Promise<device_content_dto[]> {
+    const result = await this._device_content_service.findOne(
+      device_id_dto.device_id,
+    );
+    console.log('result', result);
+    return result || [];
+  }
+
   // OPTIONAL: add an api to fetch all contents of a specific category
 
   @ApiOperation({

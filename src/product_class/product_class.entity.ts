@@ -40,7 +40,6 @@ export class product_class extends Model<product_class> {
   class_name: string;
 
   @AllowNull
-  @Default(null)
   @Column // TODO: add a default image and remove nullable
   @IsBase64()
   class_image: string;

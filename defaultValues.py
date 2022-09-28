@@ -21,20 +21,26 @@ product_classes = [
     ("Apfel", "https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg", 7, 1, 5),
     ("Birne", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/D%27anjou_pear.jpg/640px-D%27anjou_pear.jpg", 7, 1, 5),
     ("Brokkoli", "https://commons.wikimedia.org/wiki/File:Broccoli_DSC00862.png", 7, 2, 5),
-    ("Brot", "https://commons.wikimedia.org/wiki/File:Bread_%D1%85%D0%BB%D0%B5%D0%B1_03.jpg", 7, 4, 5)
+    ("Brot", "https://commons.wikimedia.org/wiki/File:Bread_%D1%85%D0%BB%D0%B5%D0%B1_03.jpg", 7, 4, 5),
 ]
 
 fridge_user = """{{"login": "{0}","password": "{1}"}}"""
 fridge_users = [
     ("admin", "admin"),
+    ("user", "user")
 ]
 
 device = """{{"device_name": "{0}"}}"""
-devices = [("Kühlschrank",)]
+devices = [("Kühlschrank",), ("Gefrierschrank",), ("Kühlschrank Nr. 2",)]
 
 device_content = """{{"class_id": {0},"ean": {1}}}"""
 device_contents = [
     (1, 3046920022651),
+    (2, 3046820222352),
+    (3, 4526039743384),
+    (1, 1039875678493),
+    (2, 6758439220483),
+    (1, 1039877685940), 
 ]
 
 def post(url, template, data):
@@ -49,4 +55,5 @@ post("http://localhost:3000/api/v1/product_category", category, categories)
 post("http://localhost:3000/api/v1/product_class", product_class, product_classes)
 post("http://localhost:3000/api/v1/fridge_user", fridge_user, fridge_users)
 post("http://localhost:3000/api/v1/device/admin", device, devices)
+post("http://localhost:3000/api/v1/device/user", device, [("Kühlschrank Nr. 3",)])
 post("http://localhost:3000/api/v1/device_content/1", device_content, device_contents)

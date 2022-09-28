@@ -8,6 +8,7 @@ import {
   CreatedAt,
   Default,
   ForeignKey,
+  HasMany,
   Model,
   PrimaryKey,
   Table,
