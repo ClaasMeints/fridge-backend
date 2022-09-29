@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import console = require('console');
 import { Repository } from 'sequelize-typescript';
 import { product_class_service } from '../product_class/product_class.service';
 import { product_dto, product_ean_dto } from './product.dto';
@@ -18,7 +19,17 @@ export class product_service {
   }
 
   async get_product_data(ean: string): Promise<product_ean_dto> {
-    return { name: null, image: null, quantity: null }; // OPTIONAL: implement
+    return fetch('https://world.openfoodfacts.org/api/v0/product/' + ean).then(
+      async (response) => {
+        return response.json().then(async (data) => {
+          return {
+            name: data.product?.product_name || null,
+            image: data.product?.image_front_url || null,
+            quantity: data.product?.quantity || null,
+          };
+        });
+      },
+    );
   }
 
   async create(product: product_dto): Promise<product_interface> {

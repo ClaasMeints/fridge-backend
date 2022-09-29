@@ -65,17 +65,19 @@ export class device_content_service {
           return this.product_service
             .get_product_data(device_content.product.ean)
             .then((product_data) => {
+              console.log('product_data', product_data);
               return {
                 name:
-                  product_data.name ||
+                  product_data?.name ||
                   device_content.product.product_class.class_name,
                 image:
-                  product_data.image ||
+                  product_data?.image ||
                   device_content.product.product_class.class_image,
-                quantity: product_data.quantity || 1,
+                quantity_str: product_data?.quantity,
+                quantity: 1,
                 unit_symbol:
                   device_content.product.product_class.unit.unit_symbol,
-                expiry_date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+                expiry_date: device_content.filled_in,
               } as device_content_dto;
             });
         });
@@ -106,6 +108,7 @@ export class device_content_service {
     await this.device_content_repository
       .findAll({
         where: { device_id: device_id },
+        attributes: ['filled_in'],
         include: [
           {
             model: this.sequelize.models.product,
@@ -134,14 +137,16 @@ export class device_content_service {
             await this.product_service
               .get_product_data(device_content.product.ean)
               .then((product_data) => {
+                console.log('product_data', product_data);
                 return {
                   name:
-                    product_data.name ||
+                    product_data?.name ||
                     device_content.product.product_class.class_name,
                   image:
-                    product_data.image ||
+                    product_data?.image ||
                     device_content.product.product_class.class_image,
-                  quantity: product_data.quantity || 1,
+                  quantity_str: product_data?.quantity,
+                  quantity: 1,
                   unit_symbol:
                     device_content.product.product_class.unit.unit_symbol,
                   expiry_date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),

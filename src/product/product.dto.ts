@@ -19,5 +19,5 @@ export class product_ean_dto {
   image: string;
   @IsInt()
   @IsPositive()
-  quantity: number;
+  quantity: string;
 }

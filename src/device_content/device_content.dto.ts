@@ -6,12 +6,14 @@ export class device_content_dto {
   constructor(
     name: string,
     image: string,
+    quantity_str: string,
     quantity: number,
     unit: string,
     expiry_date: Date,
   ) {
     this.name = name;
     this.image = image;
+    this.quantity_str = quantity_str;
     this.quantity = quantity;
     this.unit_symbol = unit;
     this.expiry_date = expiry_date;
@@ -22,11 +24,10 @@ export class device_content_dto {
   @IsNotEmpty()
   @IsBase64()
   image: string;
-  @IsNotEmpty()
+  quantity_str: string;
   @IsInt()
   @IsPositive()
   quantity: number;
-  @IsNotEmpty()
   unit_symbol: string;
   @IsNotEmpty()
   expiry_date: Date;
