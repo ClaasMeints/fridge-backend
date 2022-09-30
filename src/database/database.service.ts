@@ -1,5 +1,5 @@
-import { CreatedAt, Sequelize } from 'sequelize-typescript';
-import { config } from '../../config';
+import { Sequelize } from 'sequelize-typescript';
+import { config } from '../config';
 import { device } from '../device/device.entity';
 import { device_content } from '../device_content/device_content.entity';
 import { fridge_user } from '../fridge_user/fridge_user.entity';
@@ -26,9 +26,7 @@ sequelize.addModels([
   unit,
   unit_conversion,
 ]);
-sequelize.sync({ force: true });
-
-
+sequelize.sync();
 
 export const databaseProviders = [
   {

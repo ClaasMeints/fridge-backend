@@ -22,9 +22,8 @@ export class unit_conversion_service {
     return await this.unit_conversion_repository.create(unit_conversion);
   }
 
-  async update(unit_conversion: unit_conversion_dto): Promise<any> {
-    return await this.unit_conversion_repository.update(
-      // update the unit_conversion
+  async update(unit_conversion: unit_conversion_dto): Promise<unit_conversion> {
+    await this.unit_conversion_repository.update(
       {
         unit_factor_id: unit_conversion.unit_factor_id,
         unit_result_id: unit_conversion.unit_result_id,
@@ -36,6 +35,12 @@ export class unit_conversion_service {
         },
       },
     );
+    return await this.unit_conversion_repository.findOne({
+      where: {
+        unit_factor_id: unit_conversion.unit_factor_id,
+        unit_result_id: unit_conversion.unit_result_id,
+      },
+    });
   }
 
   async delete(unit_conversion: unit_conversion_dto): Promise<void> {

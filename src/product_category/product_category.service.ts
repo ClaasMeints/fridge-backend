@@ -3,12 +3,13 @@ import { Repository } from 'sequelize-typescript';
 import { product_category_dto } from './product_category.dto';
 import { product_category } from './product_category.entity';
 import { HttpService } from '@nestjs/axios';
+import { Sequelize } from 'sequelize-typescript';
 
 @Injectable()
 export class product_category_service {
   constructor(
     @Inject('SEQUELIZE')
-    private sequelize: any,
+    private sequelize: Sequelize,
     private httpService: HttpService,
     @Inject('PRODUCT_CATEGORY_REPOSITORY')
     private product_category_repository: typeof product_category,

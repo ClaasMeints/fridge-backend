@@ -1,7 +1,6 @@
 import { Post, Body, Put, Delete, Controller, Param } from '@nestjs/common';
 import { fridge_user_service } from './fridge_user.service';
 import { fridge_user_interface } from './fridge_user.interface';
-import { fridge_user_decorator } from '../fridge_user/fridge_user.decorator';
 
 import {
   ApiBearerAuth,

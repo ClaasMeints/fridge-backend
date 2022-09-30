@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'sequelize-typescript';
+import { Sequelize } from 'sequelize-typescript';
 import { product_category_service } from '../product_category/product_category.service';
 import { unit_service } from '../unit/unit.service';
 import { product_class_dto } from './product_class.dto';
@@ -9,7 +9,7 @@ import { product_class } from './product_class.entity';
 export class product_class_service {
   constructor(
     @Inject('SEQUELIZE')
-    private sequelize: any,
+    private sequelize: Sequelize,
     private product_category_service: product_category_service,
     private unit_service: unit_service,
     @Inject('PRODUCT_CLASS_REPOSITORY')

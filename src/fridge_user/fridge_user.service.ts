@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Repository, Sequelize } from 'sequelize-typescript';
+import { Sequelize } from 'sequelize-typescript';
 import {
   create_fridge_user_dto,
   update_fridge_user_dto,

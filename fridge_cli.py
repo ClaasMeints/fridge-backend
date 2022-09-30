@@ -76,15 +76,6 @@ def default_values():
     post("http://localhost:3000/api/v1/product_category", category_str, categories)
     post("http://localhost:3000/api/v1/product_class",
          product_class_str, product_classes)
-    # post("http://localhost:3000/api/v1/fridge_user",
-    #      fridge_user_str, fridge_users)
-    # post("http://localhost:3000/api/v1/device/admin", device_str, devices)
-    # post("http://localhost:3000/api/v1/device/user",
-    #      device_str, [("Kühlschrank Nr. 3",)])
-    # post("http://localhost:3000/api/v1/device_content/1",
-    #      ean_str, device_contents)
-    # post("http://localhost:3000/api/v1/device_content/1",
-    #      class_str, classes)
 
 
 # Fridge User

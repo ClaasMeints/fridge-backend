@@ -9,8 +9,8 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
 
   const options = new DocumentBuilder()
-    .setTitle('NestJS API')
-    .setDescription('The NestJS API description')
+    .setTitle('Fridge API')
+    .setDescription('The Fridge API description')
     .setVersion('1.0')
     .setBasePath('api/v1')
     .addBearerAuth()

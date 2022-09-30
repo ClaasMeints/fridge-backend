@@ -1,7 +1,9 @@
 import { Get, Post, Body, Put, Controller, Param } from '@nestjs/common';
 import { device_content_service } from './device_content.service';
-import { device_content_interface } from './device_content.interface';
-import { device_content_dto } from './device_content.dto';
+import {
+  content_interface,
+  device_content_interface,
+} from './device_content.interface';
 import { product_dto } from '../product/product.dto';
 
 import {
@@ -27,10 +29,14 @@ export class device_content_controller {
   @Get(':login')
   async get_all_device_contents(
     @Param() login_dto: { login: string },
-  ): Promise<device_content_dto[]> {
-    const result = await this._device_content_service.findAll(login_dto.login);
-    console.log('result', result);
-    return result || [];
+  ): Promise<content_interface[]> {
+    return (await this._device_content_service.findAll(login_dto.login)).map(
+      (content) => {
+        return {
+          content: content,
+        };
+      },
+    );
   }
 
   @ApiOperation({
@@ -41,12 +47,16 @@ export class device_content_controller {
   @Get(':device_id')
   async get_device_contents(
     @Param() device_id_dto: { device_id: number },
-  ): Promise<device_content_dto[]> {
-    const result = await this._device_content_service.findOne(
-      device_id_dto.device_id,
-    );
-    console.log('result', result);
-    return result || [];
+  ): Promise<content_interface[]> {
+    return (
+      await this._device_content_service.findAllFromDevice(
+        device_id_dto.device_id,
+      )
+    ).map((content) => {
+      return {
+        content: content,
+      };
+    });
   }
 
   // OPTIONAL: add an api to fetch all contents of a specific category
