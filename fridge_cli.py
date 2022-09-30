@@ -36,11 +36,13 @@ fridge_users = [
 device_str = """{{"device_name": "{0}"}}"""
 devices = [("Kühlschrank",), ("Gefrierschrank",), ("Kühlschrank Nr. 2",)]
 
-ean_str = """{{"ean": {0}}}"""
+ean_str = """{{"ean": "{0}"}}"""
 device_contents = []
 
 class_str = """{{"class_id": {0}}}"""
 classes = [(1,), (2,), (3,), (1,)]
+
+drop_str = """{{"class_id": {0}, "ean": "{1}"}}"""
 
 
 def post(url, template, data):
@@ -48,6 +50,14 @@ def post(url, template, data):
         json_data = template.format(*item)
         print(json_data)
         print(requests.post(url, data=json_data, headers={
+              'Content-Type': 'application/json'}))
+
+
+def put(url, template, data):
+    for item in data:
+        json_data = template.format(*item)
+        print(json_data)
+        print(requests.put(url, data=json_data, headers={
               'Content-Type': 'application/json'}))
 
 
@@ -90,9 +100,10 @@ def fridge_user(login, password):
 
 # Device Content ean
 @main.command()
+@click.option('--device_id', prompt='Device ID', help='The ID of the device.')
 @click.option('--ean', prompt='EAN', help='The EAN of the product.')
-def ean(ean):
-    post("http://localhost:3000/api/v1/device_content/1",
+def ean(device_id, ean):
+    post("http://localhost:3000/api/v1/device_content/" + device_id,
          ean_str, [(ean,)])
     click.echo('Creating device content with EAN: %s. %s' % (
         ean, 'Success'))
@@ -100,9 +111,10 @@ def ean(ean):
 
 # Device Content class
 @main.command()
+@click.option('--device_id', prompt='Device ID', help='The ID of the device.')
 @click.option('--class_id', prompt='Class ID', help='The ID of the product class.')
-def class_id(class_id):
-    post("http://localhost:3000/api/v1/device_content/1",
+def class_id(device_id, class_id):
+    post("http://localhost:3000/api/v1/device_content/" + device_id,
          class_str, [(class_id,)])
     click.echo('Creating device content with class ID: %s. %s' % (
         class_id, 'Success'))
@@ -117,6 +129,18 @@ def device(device_name, login):
          device_str, [(device_name,)])
     click.echo('Creating device with name: %s. %s' % (
         device_name, 'Success'))
+
+
+# Drop product
+@main.command()
+@click.option('--device_id', prompt='Device ID', help='The ID of the device.')
+@click.option('--ean', prompt='EAN', help='The EAN of the product.')
+@click.option('--class_id', prompt='Class ID', help='The ID of the product class.')
+def drop(device_id, ean, class_id):
+    put("http://localhost:3000/api/v1/device_content/" + device_id,
+        drop_str, [(class_id, ean)])
+    click.echo('Dropping product with EAN: %s and class ID: %s. %s' % (
+        ean, class_id, 'Success'))
 
 
 if __name__ == "__main__":

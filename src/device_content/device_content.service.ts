@@ -1,13 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { count } from 'console';
-import { filter } from 'rxjs';
+import { Op } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
+import { LessThan } from 'typeorm';
 import { fridge_user_device_relation_service } from '../fridge_user_device_relation/fridge_user_device_relation.service';
 import { product_dto } from '../product/product.dto';
 import { product_service } from '../product/product.service';
 import { device_content_dto } from './device_content.dto';
 import { device_content } from './device_content.entity';
-import { device_content_interface } from './device_content.interface';
 
 @Injectable()
 export class device_content_service {
@@ -27,6 +26,10 @@ export class device_content_service {
       .findAll({
         raw: true,
         nest: true,
+        where: {
+          dropped_out: null,
+          percentage_left: { [Op.gt]: 0 },
+        },
         include: [
           {
             model: this.sequelize.models.device,
@@ -107,7 +110,11 @@ export class device_content_service {
     const result = [];
     await this.device_content_repository
       .findAll({
-        where: { device_id: device_id },
+        where: {
+          device_id: device_id,
+          dropped_out: null,
+          percentage_left: { [Op.gt]: 0 },
+        },
         attributes: ['filled_in'],
         include: [
           {
@@ -172,7 +179,26 @@ export class device_content_service {
   async take_product_out_of_device(
     device_id: number,
     device_content_dto: product_dto,
-  ): Promise<device_content_interface> {
-    throw new Error('Method not implemented.'); // TODO: implement
+  ): Promise<device_content> {
+    return this.device_content_repository
+      .findOne({
+        where: { device_id: device_id },
+        include: [
+          {
+            model: this.sequelize.models.product,
+            as: 'product',
+            where: {
+              [Op.or]: [
+                { ean: device_content_dto.ean },
+                { class_id: device_content_dto.class_id },
+              ],
+            },
+          },
+        ],
+      })
+      .then((device_content) => {
+        device_content.update({ dropped_out: new Date(Date.now()) });
+        return device_content;
+      });
   }
 }

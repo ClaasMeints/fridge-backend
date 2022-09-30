@@ -2,7 +2,6 @@ import { Get, Post, Body, Put, Controller, Param } from '@nestjs/common';
 import { device_content_service } from './device_content.service';
 import { device_content_interface } from './device_content.interface';
 import { device_content_dto } from './device_content.dto';
-import { fridge_user_decorator } from '../fridge_user/fridge_user.decorator';
 import { product_dto } from '../product/product.dto';
 
 import {
@@ -81,9 +80,12 @@ export class device_content_controller {
     @Param() device_id_dto: { device_id: number },
     @Body() device_content_dto: product_dto,
   ): Promise<device_content_interface> {
-    return await this._device_content_service.take_product_out_of_device(
-      device_id_dto.device_id,
-      device_content_dto,
-    );
+    return {
+      device_content:
+        await this._device_content_service.take_product_out_of_device(
+          device_id_dto.device_id,
+          device_content_dto,
+        ),
+    };
   }
 }
